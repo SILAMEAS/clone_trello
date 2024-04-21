@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model JudgeProject {
+  id          String           @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  userId      String
+  containers  JudgeContainer[]
+}
+
+model JudgeContainer {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  judgeProject JudgeProject @relation(fields: [projectId], references: [id])
+  projectId    String       @db.ObjectId
+  items        String[]     @default([])
+}
+
+model TaskProject {
+  id          String              @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  userId      String
+  deadline    DateTime?
+  containers  TaskContainer[]
+  createdAt   DateTime            @default(now())
+}
+
+model TaskContainer {
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  projectId       String          @db.ObjectId
+  progressProject TaskProject @relation(fields: [projectId], references: [id])
+  tasks           Task[]
+  index           Int?
+}
+
+model Task {
+  id          String            @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  deadline    DateTime?
+  containerId String            @db.ObjectId
+  container   TaskContainer @relation(fields: [containerId], references: [id])
+  createdAt   DateTime          @default(now())
+}
