@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("mongodb+srv://jude:GlxiuRHECSRfMjTg@cluster0.94hkpyw.mongodb.net/jude?retryWrites=true&w=majority&appName=Cluster0")
+  url      = env("DATABASE_URL")
 }
 
 model JudgeProject {
